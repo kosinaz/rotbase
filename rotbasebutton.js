@@ -13,7 +13,7 @@ ROTBASE.Button.prototype.update = function () {
   'use strict';
   if (ROTBASE.mouse.x === this.x &&
       ROTBASE.mouse.y === this.y) {
-    this.bgcolor = '#444';
+    this.bgcolor = '#ccc';
   } else {
     this.bgcolor = '#000';
   }

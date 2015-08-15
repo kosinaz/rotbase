@@ -21,6 +21,10 @@ ROTBASE.Level = function (x, y, width, height) {
     y: this.exit[1],
     char: '>'
   };
+  this.target = {
+    x: 0,
+    y: 0
+  };
   for (i = 0; i < this.rooms.length; i += 1) {
     this.rooms[i].getDoors(this.initDoor.bind(this));
   }
@@ -29,7 +33,10 @@ ROTBASE.Level = function (x, y, width, height) {
 
 ROTBASE.Level.prototype.update = function () {
   'use strict';
-
+  this.target = {
+    x: ROTBASE.mouse.x,
+    y: ROTBASE.mouse.y
+  };
 };
 
 ROTBASE.Level.prototype.draw = function () {
@@ -54,7 +61,12 @@ ROTBASE.Level.prototype.drawExplored = function () {
   e = this.player.explored;
   for (i in e) {
     if (e.hasOwnProperty(i)) {
-      ROTBASE.display.draw(e[i].x, e[i].y, e[i].char, '#555');
+      if (e[i].x === this.target.x && e[i].y === this.target.y) {
+        this.bgcolor = '#444';
+      } else {
+        this.bgcolor = '#000';
+      }
+      ROTBASE.display.draw(e[i].x, e[i].y, e[i].char, '#888', this.bgcolor);
     }
   }
 };
@@ -65,7 +77,12 @@ ROTBASE.Level.prototype.drawFOV = function () {
   f = this.player.fov;
   for (i in f) {
     if (f.hasOwnProperty(i)) {
-      ROTBASE.display.draw(f[i].x, f[i].y, f[i].char);
+      if (f[i].x === this.target.x && f[i].y === this.target.y) {
+        this.bgcolor = '#ccc';
+      } else {
+        this.bgcolor = '#000';
+      }
+      ROTBASE.display.draw(f[i].x, f[i].y, f[i].char, '#fff', this.bgcolor);
     }
   }
 };
