@@ -81,7 +81,7 @@ ROTBASE.Actor.prototype.moveToTarget = function () {
   new ROT.Path.AStar(
     this.target.x,
     this.target.y,
-    this.level.isPassable.bind(this.level)
+    this.isPassable.bind(this)
   ).compute(
     this.x,
     this.y,
@@ -89,6 +89,13 @@ ROTBASE.Actor.prototype.moveToTarget = function () {
   );
   this.setXY(this.path[1]);
   return true;
+};
+
+ROTBASE.Actor.prototype.isPassable = function (x, y) {
+  'use strict';
+  if (this.explored.hasOwnProperty(x + ',' + y)) {
+    return this.level.isPassable(x, y);
+  }
 };
 
 ROTBASE.Actor.prototype.updatePath = function (x, y) {
