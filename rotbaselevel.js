@@ -11,8 +11,12 @@ ROTBASE.Level = function (x, y, width, height) {
   this.engine = new ROT.Engine(this.scheduler);
   this.map = {};
   this.psc = new ROT.FOV.PreciseShadowcasting(this.isTransparent.bind(this));
-  this.player = new ROTBASE.Actor(this);
-  this.actors = [this.player];
+  if (ROTBASE.player === undefined) {
+    ROTBASE.player = new ROTBASE.Actor(this);
+  } else {
+    ROTBASE.player.init(this);
+  }
+  this.actors = [ROTBASE.player];
   this.digger = new ROT.Map.Digger(this.width, this.height);
   this.digger.create(this.initMap.bind(this));
   this.rooms = this.digger.getRooms();
@@ -33,6 +37,7 @@ ROTBASE.Level.prototype.draw = function () {
   'use strict';
   this.drawExplored();
   this.drawFOV();
+  this.drawStats();
 };
 
 ROTBASE.Level.prototype.drawWhole = function () {
@@ -48,7 +53,7 @@ ROTBASE.Level.prototype.drawWhole = function () {
 ROTBASE.Level.prototype.drawExplored = function () {
   'use strict';
   var i, e;
-  e = this.player.explored;
+  e = ROTBASE.player.explored;
   for (i in e) {
     if (e.hasOwnProperty(i)) {
       if (e[i].x === ROTBASE.mouseX && e[i].y === ROTBASE.mouseY) {
@@ -64,7 +69,7 @@ ROTBASE.Level.prototype.drawExplored = function () {
 ROTBASE.Level.prototype.drawFOV = function () {
   'use strict';
   var i, f;
-  f = this.player.fov;
+  f = ROTBASE.player.fov;
   for (i in f) {
     if (f.hasOwnProperty(i)) {
       if (f[i].x === ROTBASE.mouseX && f[i].y === ROTBASE.mouseY) {
@@ -75,6 +80,13 @@ ROTBASE.Level.prototype.drawFOV = function () {
       ROTBASE.display.draw(f[i].x, f[i].y, f[i].char, '#fff', this.bgcolor);
     }
   }
+};
+
+ROTBASE.Level.prototype.drawStats = function () {
+  'use strict';
+  ROTBASE.display.drawText(60, 0, 'Health: ' +
+                           ROTBASE.player.currentHealth + '/' +
+                           ROTBASE.player.maxHealth);
 };
 
 ROTBASE.Level.prototype.initMap = function (x, y, value) {
@@ -122,7 +134,7 @@ ROTBASE.Level.prototype.isPassable = function (x, y) {
 ROTBASE.Level.prototype.getChar = function (x, y) {
   'use strict';
   var i;
-  if (this.player.x === x && this.player.y === y) {
+  if (ROTBASE.player.x === x && ROTBASE.player.y === y) {
     return '@';
   }
   for (i = 0; i < this.actors.length; i += 1) {

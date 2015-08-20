@@ -33,9 +33,7 @@ ROTBASE.draw = function () {
   if (ROTBASE.level) {
     ROTBASE.level.draw();
   }
-  if (ROTBASE.log) {
-    ROTBASE.display.drawText(0, 20, ROTBASE.log);
-  }
+  ROTBASE.display.drawText(0, 20, ROTBASE.log);
 };
 
 ROTBASE.handleEvent = function (e) {
@@ -49,11 +47,11 @@ ROTBASE.handleEvent = function (e) {
   }
   if (e.type === 'mousedown') {
     ROTBASE.mouseDown = true;
-    ROTBASE.level.player.target = {
+    ROTBASE.player.target = {
       x: ePos[0],
       y: ePos[1]
     };
-    ROTBASE.level.player.moveToTargetAndUnlock();
+    ROTBASE.player.moveToTargetAndUnlock();
   }
   if (e.type === 'mouseup') {
     ROTBASE.mouseDown = false;
@@ -62,11 +60,11 @@ ROTBASE.handleEvent = function (e) {
     ROTBASE.mouseX = ePos[0];
     ROTBASE.mouseY = ePos[1];
     if (ROTBASE.mouseDown) {
-      ROTBASE.level.player.target = {
+      ROTBASE.player.target = {
         x: ePos[0],
         y: ePos[1]
       };
-      ROTBASE.level.player.moveToTargetAndUnlock();
+      ROTBASE.player.moveToTargetAndUnlock();
     }
     ROTBASE.draw();
   }
@@ -96,8 +94,8 @@ ROTBASE.handleEvent = function (e) {
       break;
     case 13:
       if (ROTBASE.level.getTerrain(
-          ROTBASE.level.player.x,
-          ROTBASE.level.player.y
+          ROTBASE.player.x,
+          ROTBASE.player.y
         ) === '>') {
         ROTBASE.level = new ROTBASE.Level();
       }
@@ -123,11 +121,11 @@ ROTBASE.handleEvent = function (e) {
       newy -= 1;
       break;
     }
-    ROTBASE.level.player.target = {
-      x: ROTBASE.level.player.x + newx,
-      y: ROTBASE.level.player.y + newy
+    ROTBASE.player.target = {
+      x: ROTBASE.player.x + newx,
+      y: ROTBASE.player.y + newy
     };
-    ROTBASE.level.player.moveToTargetAndUnlock();
+    ROTBASE.player.moveToTargetAndUnlock();
   }
 };
 

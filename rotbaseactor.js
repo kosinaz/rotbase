@@ -6,11 +6,16 @@ ROTBASE.Actor = function (level, char, x, y, range, speed, health) {
   this.name = this.char === '@' ? 'adventurer' :
         ROTBASE.monsterNames[this.char.charCodeAt(0) - 65];
   console.log(new Date().getTime() + ' ' + this.name + ' created');
-  this.x = x || 30;
-  this.y = y || 10;
   this.range = range || 10;
   this.speed = speed || 10;
   this.currentHealth = this.maxHealth = health || 10;
+  this.init(level, x, y);
+};
+
+ROTBASE.Actor.prototype.init = function (level, x, y) {
+  'use strict';
+  this.x = x || 30;
+  this.y = y || 10;
   this.target = {
     x: this.x,
     y: this.y
@@ -94,6 +99,7 @@ ROTBASE.Actor.prototype.moveToTarget = function () {
   if (this.path[1] &&
       this.level.isChar(this.path[1][0], this.path[1][1], '@')) {
     ROTBASE.log += 'The ' + this.name + ' has injured you. ';
+    ROTBASE.player.currentHealth -= 1;
   } else {
     this.setXY(this.path[1]);
   }
