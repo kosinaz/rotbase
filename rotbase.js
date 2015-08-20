@@ -9,8 +9,9 @@ window.onload = function () {
   });
   document.body.appendChild(ROTBASE.display.getContainer());
   ROTBASE.level = new ROTBASE.Level();
-  window.addEventListener('mousedown', ROTBASE.handleEvent);
   window.addEventListener('click', ROTBASE.handleEvent);
+  window.addEventListener('mousedown', ROTBASE.handleEvent);
+  window.addEventListener('mouseup', ROTBASE.handleEvent);
   window.addEventListener('mousemove', ROTBASE.handleEvent);
   window.addEventListener('keydown', ROTBASE.handleEvent);
   setInterval(function () {
@@ -37,20 +38,32 @@ ROTBASE.handleEvent = function (e) {
   'use strict';
   var ePos, newx, newy;
   ePos = ROTBASE.display.eventToPosition(e);
-  if (e.type === 'mousedown') {
-    ROTBASE.level.player.target = {
-      x: ePos[0],
-      y: ePos[1]
-    };
-  }
   if (e.type === 'click') {
     if (ePos[0] === 79 && ePos[1] === 0) {
       ROTBASE.toggleFullscreen();
     }
   }
+  if (e.type === 'mousedown') {
+    ROTBASE.mouseDown = true;
+    ROTBASE.level.player.target = {
+      x: ePos[0],
+      y: ePos[1]
+    };
+    ROTBASE.level.player.moveToTargetAndUnlock();
+  }
+  if (e.type === 'mouseup') {
+    ROTBASE.mouseDown = false;
+  }
   if (e.type === 'mousemove') {
     ROTBASE.mouseX = ePos[0];
     ROTBASE.mouseY = ePos[1];
+    if (ROTBASE.mouseDown) {
+      ROTBASE.level.player.target = {
+        x: ePos[0],
+        y: ePos[1]
+      };
+      ROTBASE.level.player.moveToTargetAndUnlock();
+    }
     ROTBASE.draw();
   }
   if (e.type === 'keydown') {
@@ -110,8 +123,8 @@ ROTBASE.handleEvent = function (e) {
       x: ROTBASE.level.player.x + newx,
       y: ROTBASE.level.player.y + newy
     };
+    ROTBASE.level.player.moveToTargetAndUnlock();
   }
-  ROTBASE.level.player.moveToTargetAndUnlock();
 };
 
 ROTBASE.toggleFullscreen = function () {

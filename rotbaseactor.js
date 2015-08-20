@@ -8,7 +8,10 @@ ROTBASE.Actor = function (level, char, x, y, range, speed, health) {
   this.range = range || 10;
   this.speed = speed || 10;
   this.currentHealth = this.maxHealth = health || 10;
-  this.target = {};
+  this.target = {
+    x: this.x,
+    y: this.y
+  };
   this.path = [];
   this.fov = {};
   this.explored = {};
@@ -44,20 +47,28 @@ ROTBASE.Actor.prototype.act = function () {
     this.updateFOV.bind(this)
   );
   if (this.char === '@') {
-    ROTBASE.draw();
     this.level.engine.lock();
-    if (this.target) {
-      setTimeout(this.moveToTargetAndUnlock.bind(this), 100);
+    ROTBASE.engineLocked = true;
+    ROTBASE.draw();
+    if (this.target.x !== this.x || this.target.y !== this.y) {
+      this.moveToTargetAndUnlock();
     }
   } else {
-    this.moveToTarget.bind(this);
+    this.moveToTarget();
   }
 };
 
 ROTBASE.Actor.prototype.moveToTargetAndUnlock = function () {
   "use strict";
-  if (this.moveToTarget()) {
-    ROTBASE.level.engine.unlock();
+  if (!ROTBASE.engineLocked) {
+    return;
+  }
+  if (this.level.isPassable(this.target.x, this.target.y)) {
+    ROTBASE.engineLocked = false;
+    setTimeout(function () {
+      this.moveToTarget();
+      ROTBASE.level.engine.unlock();
+    }.bind(this), 50);
   }
 };
 
