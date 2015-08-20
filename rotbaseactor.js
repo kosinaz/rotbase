@@ -70,6 +70,7 @@ ROTBASE.Actor.prototype.moveToTargetAndUnlock = function () {
     ROTBASE.engineLocked = false;
     setTimeout(function () {
       this.moveToTarget();
+      ROTBASE.log = '';
       ROTBASE.level.engine.unlock();
     }.bind(this), 50);
   }
