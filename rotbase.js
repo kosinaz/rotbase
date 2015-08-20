@@ -1,14 +1,16 @@
-/*global ROT*/
+/*global ROT, console*/
 
 var ROTBASE = {};
 
 window.onload = function () {
   'use strict';
+  console.log(new Date().getTime() + ' window loaded');
   ROTBASE.display = new ROT.Display({
     fontFamily: 'Courier'
   });
   document.body.appendChild(ROTBASE.display.getContainer());
-  ROTBASE.level = new ROTBASE.Level();
+  ROTBASE.log = '';
+  ROTBASE.generateMonsterNames(ROTBASE.createLevel);
   window.addEventListener('click', ROTBASE.handleEvent);
   window.addEventListener('mousedown', ROTBASE.handleEvent);
   window.addEventListener('mouseup', ROTBASE.handleEvent);
@@ -27,10 +29,13 @@ window.onload = function () {
 ROTBASE.draw = function () {
   'use strict';
   ROTBASE.display.clear();
+  ROTBASE.display.draw(79, 0, '□');
   if (ROTBASE.level) {
     ROTBASE.level.draw();
   }
-  ROTBASE.display.draw(79, 0, '□');
+  if (ROTBASE.log) {
+    ROTBASE.display.drawText(0, 20, ROTBASE.log);
+  }
 };
 
 
@@ -154,4 +159,40 @@ ROTBASE.toggleFullscreen = function () {
       document.webkitExitFullscreen();
     }
   }
+};
+
+ROTBASE.generateMonsterNames = function (callback) {
+  'use strict';
+  var request = new XMLHttpRequest();
+  request.open("get", 'monsternamesamples.txt', true);
+  request.send();
+  request.onreadystatechange = function () {
+    var samples, names, generator, i, name;
+    if (request.readyState === 4) {
+      console.log(new Date().getTime() + ' monster name samples loaded');
+      ROTBASE.monsterNames = [];
+      samples = request.responseText;
+      names = samples.split('\n');
+      generator = new ROT.StringGenerator();
+      for (i = 0; i < names.length; i += 1) {
+        generator.observe(names[i]);
+      }
+      for (i = 0; i < 26; i += 1) {
+        do {
+          name = generator.generate();
+        } while (name.length < 3 ||
+                 name.length > 9 ||
+                 samples.search(name + '\n') !== -1 ||
+                 name.charAt(0) !== String.fromCharCode(97 + i));
+        ROTBASE.monsterNames.push(name.capitalize().trim());
+      }
+      console.log(new Date().getTime() + ' monster names generated');
+      callback();
+    }
+  };
+};
+
+ROTBASE.createLevel = function () {
+  'use strict';
+  ROTBASE.level = new ROTBASE.Level();
 };

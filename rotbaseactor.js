@@ -1,8 +1,11 @@
-/*global ROTBASE, ROT*/
+/*global ROTBASE, ROT, console*/
 
 ROTBASE.Actor = function (level, char, x, y, range, speed, health) {
   'use strict';
   this.char = char || '@';
+  this.name = this.char === '@' ? 'adventurer' :
+        ROTBASE.monsterNames[this.char.charCodeAt(0) - 65];
+  console.log(new Date().getTime() + ' ' + this.name + ' created');
   this.x = x || 30;
   this.y = y || 10;
   this.range = range || 10;
@@ -87,7 +90,12 @@ ROTBASE.Actor.prototype.moveToTarget = function () {
     this.y,
     this.updatePath.bind(this)
   );
-  this.setXY(this.path[1]);
+  if (this.path[1] &&
+      this.level.isChar(this.path[1][0], this.path[1][1], '@')) {
+    ROTBASE.log += 'The ' + this.name + ' has injured you. ';
+  } else {
+    this.setXY(this.path[1]);
+  }
   return true;
 };
 
