@@ -38,7 +38,6 @@ ROTBASE.draw = function () {
   }
 };
 
-
 ROTBASE.handleEvent = function (e) {
   'use strict';
   var ePos, newx, newy;
@@ -164,13 +163,14 @@ ROTBASE.toggleFullscreen = function () {
 ROTBASE.generateMonsterNames = function (callback) {
   'use strict';
   var request = new XMLHttpRequest();
-  request.open("get", 'monsternamesamples.txt', true);
+  request.open("get", 'namesamples.txt', true);
   request.send();
   request.onreadystatechange = function () {
     var samples, names, generator, i, name;
     if (request.readyState === 4) {
-      console.log(new Date().getTime() + ' monster name samples loaded');
+      console.log(new Date().getTime() + ' name samples loaded');
       ROTBASE.monsterNames = [];
+      ROTBASE.itemNames = [];
       samples = request.responseText;
       names = samples.split('\n');
       generator = new ROT.StringGenerator();
@@ -186,7 +186,17 @@ ROTBASE.generateMonsterNames = function (callback) {
                  name.charAt(0) !== String.fromCharCode(97 + i));
         ROTBASE.monsterNames.push(name.capitalize().trim());
       }
-      console.log(new Date().getTime() + ' monster names generated');
+      for (i = 0; i < 26; i += 1) {
+        do {
+          name = generator.generate();
+        } while (name.length < 3 ||
+                 name.length > 9 ||
+                 samples.search(name + '\n') !== -1 ||
+                 name.charAt(0) !== String.fromCharCode(97 + i));
+        ROTBASE.itemNames.push(name.trim());
+      }
+      console.log(new Date().getTime() + ' names generated');
+      console.log(ROTBASE.monsterNames, ROTBASE.itemNames);
       callback();
     }
   };
