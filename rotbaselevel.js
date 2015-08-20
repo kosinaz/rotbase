@@ -10,7 +10,8 @@ ROTBASE.Level = function (x, y, width, height) {
   this.scheduler = new ROT.Scheduler.Speed();
   this.engine = new ROT.Engine(this.scheduler);
   this.map = {};
-  this.player = new ROTBASE.Actor(this.scheduler);
+  this.psc = new ROT.FOV.PreciseShadowcasting(this.isTransparent.bind(this));
+  this.player = new ROTBASE.Actor(this);
   this.actors = [this.player];
   this.digger = new ROT.Map.Digger(this.width, this.height);
   this.digger.create(this.initMap.bind(this));
@@ -21,22 +22,10 @@ ROTBASE.Level = function (x, y, width, height) {
     y: this.exit[1],
     char: '>'
   };
-  this.target = {
-    x: 0,
-    y: 0
-  };
   for (i = 0; i < this.rooms.length; i += 1) {
     this.rooms[i].getDoors(this.initDoor.bind(this));
   }
-  this.fov = new ROT.FOV.PreciseShadowcasting(this.isTransparent.bind(this));
-};
-
-ROTBASE.Level.prototype.update = function () {
-  'use strict';
-  this.target = {
-    x: ROTBASE.mouse.x,
-    y: ROTBASE.mouse.y
-  };
+  this.engine.start();
 };
 
 ROTBASE.Level.prototype.draw = function () {
@@ -61,7 +50,7 @@ ROTBASE.Level.prototype.drawExplored = function () {
   e = this.player.explored;
   for (i in e) {
     if (e.hasOwnProperty(i)) {
-      if (e[i].x === this.target.x && e[i].y === this.target.y) {
+      if (e[i].x === ROTBASE.mouseX && e[i].y === ROTBASE.mouseY) {
         this.bgcolor = '#444';
       } else {
         this.bgcolor = '#000';
@@ -77,7 +66,7 @@ ROTBASE.Level.prototype.drawFOV = function () {
   f = this.player.fov;
   for (i in f) {
     if (f.hasOwnProperty(i)) {
-      if (f[i].x === this.target.x && f[i].y === this.target.y) {
+      if (f[i].x === ROTBASE.mouseX && f[i].y === ROTBASE.mouseY) {
         this.bgcolor = '#ccc';
       } else {
         this.bgcolor = '#000';
@@ -98,7 +87,7 @@ ROTBASE.Level.prototype.initMap = function (x, y, value) {
     if (ROT.RNG.getPercentage() === 1) {
       this.actors.push(
         new ROTBASE.Actor(
-          this.scheduler,
+          this,
           String.fromCharCode(this.actors.length + 64),
           x,
           y,
@@ -154,7 +143,12 @@ ROTBASE.Level.prototype.getTerrain = function (x, y) {
   return '#';
 };
 
-ROTBASE.Level.prototype.setChar = function (x, y, char) {
+ROTBASE.Level.prototype.isTerrain = function (x, y, char) {
+  'use strict';
+  return this.getTerrain(x, y) === char;
+};
+
+ROTBASE.Level.prototype.setTerrain = function (x, y, char) {
   'use strict';
   this.map[x + ',' + y] = {
     x: x,

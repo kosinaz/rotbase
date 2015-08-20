@@ -8,74 +8,28 @@ window.onload = function () {
     fontFamily: 'Courier'
   });
   document.body.appendChild(ROTBASE.display.getContainer());
-  ROTBASE.screen = { //a list of things to display on screen and interact with
-    fullscreenButton: new ROTBASE.Button(79, 0, '□'),
-    level: new ROTBASE.Level()
-  };
-  setInterval(function () {
-    ROTBASE.draw();
-    ROTBASE.update();
-  }, 10);
-  ROTBASE.mouse = {
-    x: 0,
-    y: 0,
-    down: {},
-    up: {},
-    click: {}
-  };
-  ROTBASE.newmouse = ROTBASE.mouse;
+  ROTBASE.level = new ROTBASE.Level();
   window.addEventListener('mousedown', ROTBASE.handleEvent);
-  window.addEventListener('mouseup', ROTBASE.handleEvent);
+  window.addEventListener('click', ROTBASE.handleEvent);
   window.addEventListener('mousemove', ROTBASE.handleEvent);
   window.addEventListener('keydown', ROTBASE.handleEvent);
-};
-
-ROTBASE.update = function () {
-  'use strict';
-  var i, fontSize;
-  ROTBASE.mouse = {
-    x: ROTBASE.newmouse.x,
-    y: ROTBASE.newmouse.y,
-    down: {
-      x: ROTBASE.newmouse.down.x,
-      y: ROTBASE.newmouse.down.y
-    },
-    up: {
-      x: ROTBASE.newmouse.up.x,
-      y: ROTBASE.newmouse.up.y
-    },
-    click: {
-      x: ROTBASE.newmouse.click.x,
-      y: ROTBASE.newmouse.click.y
-    }
-  };
-  for (i in ROTBASE.screen) {
-    if (ROTBASE.screen.hasOwnProperty(i)) {
-      ROTBASE.screen[i].update();
-    }
-  }
-  fontSize = ROTBASE.display.computeFontSize(
-    window.innerWidth,
-    window.innerHeight
-  );
-  if (ROTBASE.display.getOptions().fontSize !== fontSize) {
+  setInterval(function () {
     ROTBASE.display.setOptions({
-      fontSize: fontSize
+      fontSize: ROTBASE.display.computeFontSize(
+        window.innerWidth,
+        window.innerHeight
+      )
     });
-  }
-  ROTBASE.newmouse.click = {};
-  ROTBASE.newmouse.up = {};
+  }, 100);
 };
 
 ROTBASE.draw = function () {
   'use strict';
-  var i;
   ROTBASE.display.clear();
-  for (i in ROTBASE.screen) {
-    if (ROTBASE.screen.hasOwnProperty(i)) {
-      ROTBASE.screen[i].draw();
-    }
+  if (ROTBASE.level) {
+    ROTBASE.level.draw();
   }
+  ROTBASE.display.draw(79, 0, '□');
 };
 
 
@@ -84,32 +38,20 @@ ROTBASE.handleEvent = function (e) {
   var ePos, newx, newy;
   ePos = ROTBASE.display.eventToPosition(e);
   if (e.type === 'mousedown') {
-    ROTBASE.newmouse.down = {
+    ROTBASE.level.player.target = {
       x: ePos[0],
       y: ePos[1]
     };
   }
-  if (e.type === 'mouseup') {
-    ROTBASE.newmouse.up = {
-      x: ePos[0],
-      y: ePos[1]
-    };
-    if (ROTBASE.newmouse.up.x === ROTBASE.newmouse.down.x &&
-        ROTBASE.newmouse.up.y === ROTBASE.newmouse.down.y) {
-      ROTBASE.newmouse.click = {
-        x: ePos[0],
-        y: ePos[1]
-      };
-      if (ROTBASE.newmouse.click.x === ROTBASE.screen.fullscreenButton.x &&
-          ROTBASE.newmouse.click.y === ROTBASE.screen.fullscreenButton.y) {
-        ROTBASE.toggleFullscreen();
-      }
+  if (e.type === 'click') {
+    if (ePos[0] === 79 && ePos[1] === 0) {
+      ROTBASE.toggleFullscreen();
     }
-    ROTBASE.newmouse.down = {};
   }
   if (e.type === 'mousemove') {
-    ROTBASE.newmouse.x = ePos[0];
-    ROTBASE.newmouse.y = ePos[1];
+    ROTBASE.mouseX = ePos[0];
+    ROTBASE.mouseY = ePos[1];
+    ROTBASE.draw();
   }
   if (e.type === 'keydown') {
     newx = 0;
@@ -136,12 +78,11 @@ ROTBASE.handleEvent = function (e) {
       newx -= 1;
       break;
     case 13:
-      if (ROTBASE.screen.level.getTerrain(
-          ROTBASE.screen.level.player.x,
-          ROTBASE.screen.level.player.y
+      if (ROTBASE.level.getTerrain(
+          ROTBASE.level.player.x,
+          ROTBASE.level.player.y
         ) === '>') {
-        ROTBASE.screen.level.player.exit();
-        ROTBASE.screen.level.engine.unlock();
+        ROTBASE.level = new ROTBASE.Level();
       }
       return;
     case 39:
@@ -165,27 +106,12 @@ ROTBASE.handleEvent = function (e) {
       newy -= 1;
       break;
     }
-    if (ROTBASE.screen.level.getChar(
-        (ROTBASE.screen.level.player.x + newx),
-        (ROTBASE.screen.level.player.y + newy)
-      ) !== '#') {
-      if (ROTBASE.screen.level.getChar(
-          ROTBASE.screen.level.player.x + newx,
-          ROTBASE.screen.level.player.y + newy
-        ) === '+') {
-        ROTBASE.screen.level.setChar(
-          ROTBASE.screen.level.player.x + newx,
-          ROTBASE.screen.level.player.y + newy,
-          '/'
-        );
-      }
-      ROTBASE.screen.level.player.setXY([
-        ROTBASE.screen.level.player.x + newx,
-        ROTBASE.screen.level.player.y + newy
-      ]);
-      ROTBASE.screen.level.engine.unlock();
-    }
+    ROTBASE.level.player.target = {
+      x: ROTBASE.level.player.x + newx,
+      y: ROTBASE.level.player.y + newy
+    };
   }
+  ROTBASE.level.player.moveToTargetAndUnlock();
 };
 
 ROTBASE.toggleFullscreen = function () {
