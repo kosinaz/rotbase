@@ -26,6 +26,7 @@ ROTBASE.Level = function (x, y, width, height) {
     this.rooms[i].getDoors(this.initDoor.bind(this));
   }
   this.engine.start();
+  setTimeout(ROTBASE.draw, 100);
 };
 
 ROTBASE.Level.prototype.draw = function () {
