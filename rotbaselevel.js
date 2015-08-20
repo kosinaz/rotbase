@@ -135,6 +135,11 @@ ROTBASE.Level.prototype.getChar = function (x, y) {
   return '#';
 };
 
+ROTBASE.Level.prototype.isChar = function (x, y, char) {
+  'use strict';
+  return this.getChar(x, y) === char;
+};
+
 ROTBASE.Level.prototype.getTerrain = function (x, y) {
   'use strict';
   if (this.map.hasOwnProperty(x + ',' + y)) {

@@ -74,7 +74,7 @@ ROTBASE.Actor.prototype.moveToTargetAndUnlock = function () {
 
 ROTBASE.Actor.prototype.moveToTarget = function () {
   "use strict";
-  if (!this.target || !this.level.isPassable(this.target.x, this.target.y)) {
+  if (!this.level.isPassable(this.target.x, this.target.y)) {
     return false;
   }
   this.path = [];
@@ -115,8 +115,8 @@ ROTBASE.Actor.prototype.updateFOV = function (x, y) {
     y: y,
     char: this.level.getTerrain(x, y)
   };
-  if (this.char !== '@' && this.fov[x + ',' + y].char === '@') {
-    this.targetX = x;
-    this.targetY = y;
+  if (this.char !== '@' && this.level.isChar(x, y, '@')) {
+    this.target.x = x;
+    this.target.y = y;
   }
 };
