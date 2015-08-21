@@ -17,7 +17,11 @@ ROTBASE.Level = function (x, y, width, height) {
     ROTBASE.player.init(this);
   }
   this.actors = [ROTBASE.player];
-  this.digger = new ROT.Map.Digger(this.width, this.height);
+  this.digger = new ROT.Map.Digger(this.width, this.height, {
+    roomWidth: [2, 6],
+    roomHeight: [2, 6],
+    corridorLength: [2, 2]
+  });
   this.digger.create(this.initMap.bind(this));
   this.rooms = this.digger.getRooms();
   this.exit = this.rooms[this.rooms.length - 1].getCenter();
