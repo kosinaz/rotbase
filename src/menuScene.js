@@ -32,13 +32,13 @@ export default class MenuScene extends Scene {
     super.handleEvent(event);
     if (event.type === 'keydown') {
       if (event.keyCode === 40 && this.selected < 2) {
-        this.game.display.draw(1, 4 + this.selected * 2, ' ');
+        this.game.display.draw(1, 4 + this.selected * 2, ' ', 'transparent');
         this.selected += 1;
-        this.game.display.draw(1, 4 + this.selected * 2, '}');
+        this.game.display.draw(1, 4 + this.selected * 2, '}', 'transparent');
       } else if (event.keyCode === 38 && this.selected > 0) {
-        this.game.display.draw(1, 4 + this.selected * 2, ' ');
+        this.game.display.draw(1, 4 + this.selected * 2, ' ', 'transparent');
         this.selected -= 1;
-        this.game.display.draw(1, 4 + this.selected * 2, '}');
+        this.game.display.draw(1, 4 + this.selected * 2, '}', 'transparent');
       } else if (event.keyCode === 13) {
         if (this.selected === 0) {
           this.switchTo(this.game.worldScene);

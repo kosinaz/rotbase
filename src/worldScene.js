@@ -117,10 +117,14 @@ export default class WorldScene extends Scene {
       } else if (event.keyCode === 13) {
         if (char === '<') {
           this.world.hero.z -= 1;
+          this.world.hero.x = this.world.downs[this.world.hero.z][0];
+          this.world.hero.y = this.world.downs[this.world.hero.z][1];
           this.world.engine.unlock();
           return;
         } else if (char === '>') {
           this.world.hero.z += 1;
+          this.world.hero.x = this.world.ups[this.world.hero.z][0];
+          this.world.hero.y = this.world.ups[this.world.hero.z][1];
           this.world.engine.unlock();
           return;
         }

@@ -17,7 +17,7 @@ export default class CreditsScene extends Scene {
     super.start();
     this.game.display.drawText(36, 1, 'Credits');
     this.game.display.drawText(
-        2, 4, 'Code: by Zoltan Kosina Licensed under the Unlicense'
+        2, 4, 'Code: by Zoltan Kosina Licensed under the Unlicense',
     );
     this.game.display.drawText(
         2,
