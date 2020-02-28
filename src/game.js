@@ -19,7 +19,7 @@ const tileset = document.createElement('img');
 tileset.src = './images/1bitpack_kenney/Tilesheet/colored.png';
 Game.display = new Display({
   bg: '#472d3c',
-  layout: Game.tiled ? 'tile' : 'rect',
+  layout: Game.tiled ? 'tile-gl' : 'rect',
   tileWidth: 16,
   tileHeight: 16,
   tileSet: tileset,
@@ -107,6 +107,13 @@ Game.display = new Display({
   // forceSquareRatio: true,
   // fontFamily: 'font',
 });
+if (Game.tiled) {
+  Game.display.drawText = function(x, y, text) {
+    for (let i = 0; i < text.length; i += 1) {
+      this.draw(x + i, y, text[i], 'transparent');
+    };
+  };
+}
 document.body.appendChild(Game.display.getContainer());
 Game.worldScene = new WorldScene(Game);
 Game.helpScene = new HelpScene(Game);
@@ -115,5 +122,5 @@ Game.winScene = new WinScene(Game);
 Game.failScene = new FailScene(Game);
 Game.menuScene = new MenuScene(Game);
 tileset.onload = function() {
-  Game.worldScene.start();
+  Game.menuScene.start();
 };

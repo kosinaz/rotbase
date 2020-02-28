@@ -16,13 +16,15 @@ export default class HelpScene extends Scene {
   start() {
     super.start();
     this.game.display.drawText(38, 1, 'Help');
-    this.game.display.drawText(2, 3, `
-      Move or attack with mouse or arrow or num or wasd keys
-
-      Move upstairs or downstairs with mouse or enter key
-
-      Mute or unmute the music with mouse or m key
-    `);
+    this.game.display.drawText(
+        2, 4, 'Move or attack with mouse or arrow or num or wasd keys',
+    );
+    this.game.display.drawText(
+        2, 6, 'Move upstairs or downstairs with mouse or enter key',
+    );
+    this.game.display.drawText(
+        2, 8, 'Mute or unmute the music with mouse or m key',
+    );
     this.game.display.drawText(1, 23, '}Back');
   }
 

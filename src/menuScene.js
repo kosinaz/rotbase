@@ -16,7 +16,7 @@ export default class MenuScene extends Scene {
   start() {
     super.start();
     this.selected = 0;
-    this.game.display.drawText(36, 1, 'ROTBASE', 'transparent');
+    this.game.display.drawText(36, 1, 'ROTBASE');
     this.game.display.drawText(1, 4, '}Start');
     this.game.display.drawText(2, 6, 'Help');
     this.game.display.drawText(2, 8, 'Credits');

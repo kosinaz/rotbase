@@ -61,6 +61,11 @@ export default class WorldScene extends Scene {
         this.game.display.draw(+p[0], +p[1], char, color, bg);
       }
     });
+    this.game.display.drawText(
+        70, 24, `Music: ${this.music.muted ? 'off' : 'on'}`,
+    );
+    this.game.display.drawText(0, 24, `Level: ${this.world.hero.z}`);
+    this.game.display.drawText(10, 24, `Health: ${this.world.hero.health}`);
   }
 
   /**
@@ -80,6 +85,11 @@ export default class WorldScene extends Scene {
       this.update();
       return;
     } else if (event.type === 'mousedown') {
+      if (this.eventX > 69 && this.eventY === 24) {
+        this.music.muted = !this.music.muted;
+        this.update();
+        return;
+      }
       if (this.world.hero.isAtXY(this.eventX, this.eventY)) {
         if (char === '<') {
           this.world.hero.z -= 1;
