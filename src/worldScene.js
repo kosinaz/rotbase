@@ -41,15 +41,15 @@ export default class WorldScene extends Scene {
       const p = position.split(',');
       if (+p[2] === this.world.hero.z) {
         let char = this.world.map.get(position);
-        let color = '#444';
-        let bg = '#000';
+        let color = this.game.tiled ? 'rgba(71, 45, 60, 0.75)' : '#888';
+        let bg = '#472d3c';
         if (+p[0] === this.mouseX &&
             +p[1] === this.mouseY &&
             this.world.hero.isPassable(+p[0], +p[1])) {
-          bg = '#888';
+          bg = '#aaa';
         }
         if (this.world.hero.fov.has(`${p[0]},${p[1]}`)) {
-          color = '#ccc';
+          color = this.game.tiled ? 'transparent' : '#ccc';
           const actor = this.world.actors.find((actor) => actor.isAt(position));
           if (actor) {
             char = actor.char;
@@ -61,11 +61,6 @@ export default class WorldScene extends Scene {
         this.game.display.draw(+p[0], +p[1], char, color, bg);
       }
     });
-    this.game.display.drawText(
-        70, 24, `Music: ${this.music.muted ? 'off' : 'on'}`,
-    );
-    this.game.display.drawText(0, 24, `Level: ${this.world.hero.z}`);
-    this.game.display.drawText(10, 24, `Health: ${this.world.hero.health}`);
   }
 
   /**
@@ -85,11 +80,6 @@ export default class WorldScene extends Scene {
       this.update();
       return;
     } else if (event.type === 'mousedown') {
-      if (this.eventX > 69 && this.eventY === 24) {
-        this.music.muted = !this.music.muted;
-        this.update();
-        return;
-      }
       if (this.world.hero.isAtXY(this.eventX, this.eventY)) {
         if (char === '<') {
           this.world.hero.z -= 1;

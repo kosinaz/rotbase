@@ -16,8 +16,8 @@ export default class MenuScene extends Scene {
   start() {
     super.start();
     this.selected = 0;
-    this.game.display.drawText(36, 1, 'ROTBASE');
-    this.game.display.drawText(1, 4, '>Start');
+    this.game.display.drawText(36, 1, 'ROTBASE', 'transparent');
+    this.game.display.drawText(1, 4, '}Start');
     this.game.display.drawText(2, 6, 'Help');
     this.game.display.drawText(2, 8, 'Credits');
   }
@@ -34,11 +34,11 @@ export default class MenuScene extends Scene {
       if (event.keyCode === 40 && this.selected < 2) {
         this.game.display.draw(1, 4 + this.selected * 2, ' ');
         this.selected += 1;
-        this.game.display.draw(1, 4 + this.selected * 2, '>');
+        this.game.display.draw(1, 4 + this.selected * 2, '}');
       } else if (event.keyCode === 38 && this.selected > 0) {
         this.game.display.draw(1, 4 + this.selected * 2, ' ');
         this.selected -= 1;
-        this.game.display.draw(1, 4 + this.selected * 2, '>');
+        this.game.display.draw(1, 4 + this.selected * 2, '}');
       } else if (event.keyCode === 13) {
         if (this.selected === 0) {
           this.switchTo(this.game.worldScene);

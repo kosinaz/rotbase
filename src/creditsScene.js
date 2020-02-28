@@ -16,25 +16,20 @@ export default class CreditsScene extends Scene {
   start() {
     super.start();
     this.game.display.drawText(36, 1, 'Credits');
-    this.game.display.drawText(2, 4, `Code and art
+    this.game.display.drawText(2, 4, `Code
 
       original content made by Zoltan Kosina Licensed under the Unlicense
     
 
-      Code Toolkit
+      Code toolkit
 
-      rot.js ©2012-2020 Ondrej Zara Licensed under BSD 3-Clause "New" or "Revised"
-    
+      rotjs by Ondrej Zara Licensed under BSD 3 Clause New or Revised
 
-      Music
 
-      by Licensed under Creative Commons Attribution 4.0 International
-      
-      
-      Font
-      
-      Free for personal use from .com/.font`);
-    this.game.display.drawText(1, 23, '>Back');
+      Art
+
+      1 Bit Pack by Kenney Licensed under Creative Commons Zero`);
+    this.game.display.drawText(1, 23, '}Back');
   }
 
   /**

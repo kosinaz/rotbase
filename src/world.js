@@ -33,21 +33,21 @@ export default class World {
     this.ups = [[]];
     this.downs = [[60, 12]];
     this.actors = [];
-    const arena = new Arena(80, 24);
+    const arena = new Arena(80, 25);
     arena.create((x, y, value) => {
       if (value) {
         this.map.set(`${x},${y},0`, '~');
       } else if (!RNG.getUniformInt(0, 5)) {
-        if (x === 1 || x === 78 || y === 1 || y === 22) {
+        if (x === 1 || x === 78 || y === 1 || y === 23) {
           this.map.set(`${x},${y},0`, '~');
         } else {
           this.map.set(`${x},${y},0`, '^');
         }
       } else {
-        this.map.set(`${x},${y},0`, '.');
+        this.map.set(`${x},${y},0`, ',');
       }
     });
-    const digger = new Digger(80, 24);
+    const digger = new Digger(80, 25);
     for (let z = 1; z < 10; z += 1) {
       digger.create((x, y, value) => {
         if (value) {
@@ -63,7 +63,7 @@ export default class World {
       this.map.set(`${this.downs[z][0]},${this.downs[z][1]},${z}`, '>');
     }
     this.hero = new Hero(this, `20,12,0`);
-    this.map.set(`20,12,0`, '.');
+    this.map.set(`20,12,0`, ',');
     this.map.set(`${this.downs[0][0]},${this.downs[0][1]},0`, '>');
     this.engine.start();
   }

@@ -17,13 +17,13 @@ export default class HelpScene extends Scene {
     super.start();
     this.game.display.drawText(38, 1, 'Help');
     this.game.display.drawText(2, 3, `
-      Move/attack with mouse/arrow/num/wasd keys.
+      Move or attack with mouse or arrow or num or wasd keys
 
-      Move upstairs/downstairs with mouse/enter key.
+      Move upstairs or downstairs with mouse or enter key
 
-      Mute/unmute the music with mouse/m key.
+      Mute or unmute the music with mouse or m key
     `);
-    this.game.display.drawText(1, 23, '>Back');
+    this.game.display.drawText(1, 23, '}Back');
   }
 
   /**

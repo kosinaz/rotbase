@@ -19,7 +19,7 @@ export default class Actor {
   constructor(world, position) {
     this.world = world;
     this.pos = position.split(',');
-    this.char = 'm';
+    this.char = '§';
     this.health = 3;
     this.damage = 1;
     this.speed = 1;
