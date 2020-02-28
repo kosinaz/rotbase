@@ -16,7 +16,7 @@ export default class Game {
 }
 Game.tiled = true;
 const tileset = document.createElement('img');
-tileset.src = '../images/1bitpack_kenney/Tilesheet/colored.png';
+tileset.src = './images/1bitpack_kenney/Tilesheet/colored.png';
 Game.display = new Display({
   bg: '#472d3c',
   layout: Game.tiled ? 'tile' : 'rect',
