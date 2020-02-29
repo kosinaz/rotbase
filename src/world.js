@@ -29,16 +29,17 @@ export default class World {
   create() {
     this.scheduler = new Simple();
     this.engine = new Engine(this.scheduler);
+    this.log = [''];
     this.map = new Map();
     this.ups = [[]];
     this.downs = [[60, 12]];
     this.actors = [];
-    const arena = new Arena(80, 24);
+    const arena = new Arena();
     arena.create((x, y, value) => {
       if (value) {
         this.map.set(`${x},${y},0`, '~');
       } else if (!RNG.getUniformInt(0, 5)) {
-        if (x === 1 || x === 78 || y === 1 || y === 22) {
+        if (x === 1 || x === 78 || y === 1 || y === 23) {
           this.map.set(`${x},${y},0`, '~');
         } else {
           this.map.set(`${x},${y},0`, '^');
@@ -47,7 +48,7 @@ export default class World {
         this.map.set(`${x},${y},0`, ',');
       }
     });
-    const digger = new Digger(80, 24);
+    const digger = new Digger();
     for (let z = 1; z < 10; z += 1) {
       digger.create((x, y, value) => {
         if (value) {

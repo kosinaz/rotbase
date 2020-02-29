@@ -20,6 +20,7 @@ export default class Actor {
     this.world = world;
     this.pos = position.split(',');
     this.char = '§';
+    this.name = 'snake';
     this.health = 3;
     this.damage = 1;
     this.speed = 1;
@@ -104,7 +105,9 @@ export default class Actor {
    */
   weaken(value) {
     this.health -= value;
+    this.world.log[0] += ` ${this.name} lost ${value} health `;
     if (this.health < 1) {
+      this.world.log[0] += `and died  `;
       this.kill();
     }
   }
@@ -191,7 +194,7 @@ export default class Actor {
       return;
     }
     if (this.world.hero.isAtXY(this.path[1][0], this.path[1][1])) {
-      this.world.hero.weaken(this.damage + RNG.getUniformInt(1, 2));
+      this.world.hero.weaken(this.damage + RNG.getUniformInt(0, 1));
       return;
     } else {
       this.x = this.path[1][0];

@@ -20,7 +20,9 @@ export default class Hero extends Actor {
    */
   constructor(world, position) {
     super(world, position);
+    this.turns = 1;
     this.char = '@';
+    this.name = 'you';
     this.health = 10;
     this.explored = new Set();
     this.fov = new Set();
@@ -33,6 +35,7 @@ export default class Hero extends Actor {
    * @memberof Hero
    */
   act() {
+    this.turns += 1;
     this.fov = new Set();
     this.ps.compute(this.x, this.y, 11, (x, y) => {
       this.fov.add(`${x},${y}`);
@@ -40,8 +43,10 @@ export default class Hero extends Actor {
       if (!this.explored.has(position)) {
         this.explored.add(position);
         const char = this.world.map.get(position);
-        if (!RNG.getUniformInt(0, 1000) && char === '.') {
-          this.world.actors.push(new Actor(this.world, position));
+        if (!RNG.getUniformInt(0, 250) && char === '.') {
+          const foe = new Actor(this.world, position);
+          this.world.actors.push(foe);
+          this.target = null;
         }
       }
     });
@@ -74,6 +79,7 @@ export default class Hero extends Actor {
       actor.isAt(this.getPosition(this.path[1][0], this.path[1][1])),
     );
     if (actor) {
+      this.world.log.unshift('');
       actor.weaken(this.damage + RNG.getUniformInt(0, 1));
       this.target = null;
     } else {

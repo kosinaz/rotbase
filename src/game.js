@@ -102,8 +102,8 @@ Game.display = new Display({
   // width: 32,
   // height: 32,
   tileColorize: true,
-  // width: 55,
-  // height: 39,
+  width: 80,
+  height: 30,
   // forceSquareRatio: true,
   // fontFamily: 'font',
 });

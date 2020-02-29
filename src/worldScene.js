@@ -72,10 +72,11 @@ export default class WorldScene extends Scene {
       }
     });
     this.game.display.drawText(
-        70, 24, `Music: ${this.music.muted ? 'off' : 'on'}`,
+        69, 26, `Music: ${this.music.muted ? 'off' : 'on'}`,
     );
-    this.game.display.drawText(0, 24, `Level: ${this.world.hero.z}`);
-    this.game.display.drawText(10, 24, `Health: ${this.world.hero.health}`);
+    this.game.display.drawText(1, 26, `Level: ${this.world.hero.z}`);
+    this.game.display.drawText(11, 26, `Health: ${this.world.hero.health}`);
+    this.game.display.drawText(0, 28, this.world.log[0].slice(-80));
   }
 
   /**
