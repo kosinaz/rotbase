@@ -46,10 +46,20 @@ export default class WorldScene extends Scene {
         if (+p[0] === this.mouseX &&
             +p[1] === this.mouseY &&
             this.world.hero.isPassable(+p[0], +p[1])) {
-          bg = '#aaa';
+          if (this.game.tiled) {
+            color = 'rgba(255, 255, 255, 0.25)';
+          } else {
+            bg = '#aaa';
+          }
         }
         if (this.world.hero.fov.has(`${p[0]},${p[1]}`)) {
           color = this.game.tiled ? 'transparent' : '#ccc';
+          if (+p[0] === this.mouseX &&
+              +p[1] === this.mouseY &&
+              this.world.hero.isPassable(+p[0], +p[1]) &&
+              this.game.tiled) {
+            color = 'rgba(255, 255, 255, 0.5)';
+          }
           const actor = this.world.actors.find((actor) => actor.isAt(position));
           if (actor) {
             char = actor.char;
