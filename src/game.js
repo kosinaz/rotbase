@@ -14,7 +14,7 @@ import FailScene from './failScene.js';
 export default class Game {
 
 }
-Game.tiled = true;
+Game.tiled = false;
 const tileset = document.createElement('img');
 tileset.src = './images/1bitpack_kenney/Tilesheet/colored.png';
 Game.display = new Display({
@@ -31,7 +31,8 @@ Game.display = new Display({
     '~': [136, 85],
     '^': [68, 34],
     ',': [102, 0],
-    '.': [68, 0],
+    '̬ ': [102, 0],
+    '‧': [68, 0],
     '>': [51, 102],
     '<': [34, 102],
     '}': [408, 357],

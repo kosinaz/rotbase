@@ -17,7 +17,7 @@ export default class MenuScene extends Scene {
     super.start();
     this.selected = 0;
     this.game.display.drawText(36, 1, 'ROTBASE');
-    this.game.display.drawText(1, 4, '}Start');
+    this.game.display.drawText(1, 4, '➧Start');
     this.game.display.drawText(2, 6, 'Help');
     this.game.display.drawText(2, 8, 'Credits');
   }
@@ -32,13 +32,21 @@ export default class MenuScene extends Scene {
     super.handleEvent(event);
     if (event.type === 'keydown') {
       if (event.keyCode === 40 && this.selected < 2) {
-        this.game.display.draw(1, 4 + this.selected * 2, ' ', 'transparent');
+        this.game.display.draw(
+            1, 4 + this.selected * 2, ' ', this.game.tiled ? 'transparent' : '',
+        );
         this.selected += 1;
-        this.game.display.draw(1, 4 + this.selected * 2, '}', 'transparent');
+        this.game.display.draw(
+            1, 4 + this.selected * 2, '➧', this.game.tiled ? 'transparent' : '',
+        );
       } else if (event.keyCode === 38 && this.selected > 0) {
-        this.game.display.draw(1, 4 + this.selected * 2, ' ', 'transparent');
+        this.game.display.draw(
+            1, 4 + this.selected * 2, ' ', this.game.tiled ? 'transparent' : '',
+        );
         this.selected -= 1;
-        this.game.display.draw(1, 4 + this.selected * 2, '}', 'transparent');
+        this.game.display.draw(
+            1, 4 + this.selected * 2, '➧', this.game.tiled ? 'transparent' : '',
+        )
       } else if (event.keyCode === 13) {
         if (this.selected === 0) {
           this.switchTo(this.game.worldScene);

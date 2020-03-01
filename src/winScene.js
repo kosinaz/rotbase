@@ -16,7 +16,7 @@ export default class WinScene extends Scene {
   start() {
     super.start();
     this.game.display.drawText(30, 1, 'CONGRATULATIONS! YOU WON!');
-    this.game.display.drawText(1, 23, '}Back to main');
+    this.game.display.drawText(1, 23, '➧Back to main');
   }
 
   /**

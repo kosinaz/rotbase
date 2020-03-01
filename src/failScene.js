@@ -16,7 +16,7 @@ export default class FailScene extends Scene {
   start() {
     super.start();
     this.game.display.drawText(35, 1, 'GAME OVER');
-    this.game.display.drawText(1, 23, '}Back to main');
+    this.game.display.drawText(1, 23, '➧Back to main');
   }
 
   /**

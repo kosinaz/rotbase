@@ -27,7 +27,7 @@ export default class CreditsScene extends Scene {
     this.game.display.drawText(
         2, 8, 'Art: 1 Bit Pack by Kenney Licensed under Creative Commons Zero',
     );
-    this.game.display.drawText(1, 23, '}Back');
+    this.game.display.drawText(1, 23, '➧Back');
   }
 
   /**

@@ -42,10 +42,10 @@ export default class World {
         if (x === 1 || x === 78 || y === 1 || y === 23) {
           this.map.set(`${x},${y},0`, '~');
         } else {
-          this.map.set(`${x},${y},0`, '^');
+          this.map.set(`${x},${y},0`, '♣');
         }
       } else {
-        this.map.set(`${x},${y},0`, ',');
+        this.map.set(`${x},${y},0`, RNG.getItem(['̬ ', 'ˬ', '˯']));
       }
     });
     const digger = new Digger();
@@ -54,7 +54,7 @@ export default class World {
         if (value) {
           this.map.set(`${x},${y},${z}`, '#');
         } else {
-          this.map.set(`${x},${y},${z}`, '.');
+          this.map.set(`${x},${y},${z}`, '‧');
         }
       });
       const rooms = digger.getRooms();
@@ -64,7 +64,7 @@ export default class World {
       this.map.set(`${this.downs[z][0]},${this.downs[z][1]},${z}`, '>');
     }
     this.hero = new Hero(this, `20,12,0`);
-    this.map.set(`20,12,0`, ',');
+    this.map.set(`20,12,0`, '˯');
     this.map.set(`${this.downs[0][0]},${this.downs[0][1]},0`, '>');
     this.engine.start();
   }

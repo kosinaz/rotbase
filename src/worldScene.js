@@ -76,7 +76,7 @@ export default class WorldScene extends Scene {
     );
     this.game.display.drawText(1, 26, `Level: ${this.world.hero.z}`);
     this.game.display.drawText(11, 26, `Health: ${this.world.hero.health}`);
-    this.game.display.drawText(0, 28, this.world.log[0].slice(-80));
+    this.game.display.drawText(1, 28, this.world.log[0].slice(-80));
   }
 
   /**
@@ -123,6 +123,10 @@ export default class WorldScene extends Scene {
       let y = this.world.hero.y;
       if (event.keyCode === 77) {
         this.music.muted = !this.music.muted;
+        this.update();
+        return;
+      } else if (event.keyCode === 84) {
+        this.game.tiled = !this.game.tiled;
         this.update();
         return;
       } else if (event.keyCode === 13) {

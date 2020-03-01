@@ -25,7 +25,7 @@ export default class HelpScene extends Scene {
     this.game.display.drawText(
         2, 8, 'Mute or unmute the music with mouse or m key',
     );
-    this.game.display.drawText(1, 23, '}Back');
+    this.game.display.drawText(1, 23, '➧Back');
   }
 
   /**
