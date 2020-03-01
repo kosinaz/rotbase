@@ -24,7 +24,7 @@ Game.rectOptions = {
   height: 30,
   fontSize: 16,
   forceSquareRatio: true,
-}
+};
 Game.tileOptions = {
   bg: '#472d3c',
   layout: 'tile-gl',
@@ -46,6 +46,7 @@ Game.tileOptions = {
     '+': [459, 391],
     '⌐': [85, 527],
     '⊠': [204, 527],
+    '⁍': [255, 340],
     '>': [51, 102],
     '<': [34, 102],
     '♥': [391, 374],

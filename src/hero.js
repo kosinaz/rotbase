@@ -1,7 +1,5 @@
 import {RNG} from '../lib/rot/index.js';
 import Actor from './actor.js';
-import Snake from './snake.js';
-import Bat from './bat.js';
 import PreciseShadowcasting from '../lib/rot/fov/precise-shadowcasting.js';
 import AStar from '../lib/rot/path/astar.js';
 
@@ -28,6 +26,8 @@ export default class Hero extends Actor {
     this.health = 5;
     this.damage = 1;
     this.speed = 3;
+    this.hasPistol = false;
+    this.bullets = 0;
     this.explored = new Set();
     this.fov = new Set();
     this.ps = new PreciseShadowcasting(this.isPassable.bind(this));
@@ -47,24 +47,6 @@ export default class Hero extends Actor {
       const position = this.getPosition(x, y);
       if (!this.explored.has(position)) {
         this.explored.add(position);
-        const char = this.world.map.get(position);
-        if (char === '‧') {
-          if (!RNG.getUniformInt(0, 50)) {
-            const foe = new Snake(this.world, position);
-            this.world.actors.push(foe);
-            this.target = null;
-          } else if (!RNG.getUniformInt(0, 50)) {
-            const foe = new Bat(this.world, position);
-            this.world.actors.push(foe);
-            this.target = null;
-          } else if (!RNG.getUniformInt(0, 250)) {
-            this.world.map.set(position, '+');
-          } else if (!RNG.getUniformInt(0, 1000)) {
-            this.world.map.set(position, '⌐');
-          } else if (!RNG.getUniformInt(0, 500)) {
-            this.world.map.set(position, '⊠');
-          }
-        }
       }
     });
     this.world.update();
@@ -102,6 +84,25 @@ export default class Hero extends Actor {
     } else {
       this.x = this.path[1][0];
       this.y = this.path[1][1];
+      const char = this.world.map.get(this.position);
+      if (['+', '⊠', '⌐'].includes(char)) {
+        this.world.map.set(this.position, '‧');
+        if (char === '+') {
+          this.health = Math.min(5, this.health + 1);
+          this.world.log.unshift(` you used a medkit `);
+        } else if (char === '⊠') {
+          const bullets = RNG.getUniformInt(2, 6);
+          this.bullets = Math.min(12, this.bullets + bullets);
+          this.world.log.unshift(` you picked up ${bullets} bullets `);
+        } else if (char === '⌐') {
+          const bullets = RNG.getUniformInt(2, 6);
+          this.hasPistol = true;
+          this.bullets = Math.min(12, this.bullets + bullets);
+          this.world.log.unshift(
+              ` you picked up a pistol with ${bullets} bullets `,
+          );
+        }
+      }
     }
     this.ps.compute(this.x, this.y, 11, (x, y) => {
       const actor = this.world.actors.find((actor) =>

@@ -1,4 +1,5 @@
 import Actor from './actor.js';
+import {RNG} from '../lib/rot/index.js';
 
 /**
  * Represents a monster.
@@ -17,12 +18,24 @@ export default class Bat extends Actor {
    */
   constructor(world, position) {
     super(world, position);
-    this.turns = 1;
     this.char = 'ᨓ';
     this.name = 'bat';
     this.health = 3;
     this.damage = 1;
-    this.speed = 2;
+    this.speed = 3;
     this.world.scheduler.add(this, true);
+  }
+
+  /**
+   * The function that determines the actor's next action. Called by the engine.
+   *
+   * @memberof Actor
+   */
+  act() {
+    this.target = [
+      this.x - RNG.getItem([-1, 1]),
+      this.y - RNG.getItem([-1, 1]),
+    ];
+    this.moveToTarget();
   }
 }

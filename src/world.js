@@ -1,6 +1,8 @@
 import Speed from '../lib/rot/scheduler/speed.js';
 import {Engine, RNG} from '../lib/rot/index.js';
 import Hero from './hero.js';
+import Snake from './snake.js';
+import Bat from './bat.js';
 import Arena from '../lib/rot/map/arena.js';
 import Digger from '../lib/rot/map/digger.js';
 
@@ -58,6 +60,38 @@ export default class World {
         }
       });
       const rooms = digger.getRooms();
+      for (let i = 1; i < rooms.length - 2; i += 1) {
+        const roomType = RNG.getItem(['snake', 'bat']);
+        for (let j = 0; j < RNG.getUniformInt(1, 5); j += 1) {
+          const x = RNG.getUniformInt(rooms[i].getLeft(), rooms[i].getRight());
+          const y = RNG.getUniformInt(rooms[i].getTop(), rooms[i].getBottom());
+          const actor = this.actors.find(
+              (actor) => actor.x === x && actor.y === y,
+          );
+          if (!actor) {
+            if (roomType === 'snake') {
+              const foe = new Snake(this, `${x},${y},${z}`);
+              this.actors.push(foe);
+              this.target = null;
+            } else if (roomType === 'bat') {
+              const foe = new Bat(this, `${x},${y},${z}`);
+              this.actors.push(foe);
+              this.target = null;
+            }
+          }
+        }
+        for (let j = 0; j < RNG.getUniformInt(1, 5); j += 1) {
+          const x = RNG.getUniformInt(rooms[i].getLeft(), rooms[i].getRight());
+          const y = RNG.getUniformInt(rooms[i].getTop(), rooms[i].getBottom());
+          if (!RNG.getUniformInt(0, 5)) {
+            this.map.set(`${x},${y},${z}`, '+');
+          } else if (!RNG.getUniformInt(0, 5)) {
+            this.map.set(`${x},${y},${z}`, '⊠');
+          } else if (!RNG.getUniformInt(0, 5)) {
+            this.map.set(`${x},${y},${z}`, '⌐');
+          }
+        }
+      }
       this.ups[z] = rooms[0].getCenter();
       this.downs[z] = rooms[rooms.length - 1].getCenter();
       this.map.set(`${this.ups[z][0]},${this.ups[z][1]},${z}`, '<');

@@ -17,7 +17,6 @@ export default class Snake extends Actor {
    */
   constructor(world, position) {
     super(world, position);
-    this.turns = 1;
     this.char = '§';
     this.name = 'snake';
     this.health = 3;

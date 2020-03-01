@@ -87,6 +87,12 @@ export default class WorldScene extends Scene {
     );
     color = 'transparent';
     bg = null;
+    if (this.world.hero.hasPistol) {
+      this.game.display.draw(9, 26, '⌐', this.game.tiled ? color : null);
+    }
+    for (let i = 0; i < this.world.hero.bullets; i += 1) {
+      this.game.display.draw(10 + i, 26, '⁍', this.game.tiled ? color : null);
+    }
     if (this.mouseX === 78 && this.mouseY === 26) {
       if (this.game.tiled) {
         color = 'rgba(255, 255, 255, 0.25)';
