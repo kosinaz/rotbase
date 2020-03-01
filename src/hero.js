@@ -1,6 +1,7 @@
 import {RNG} from '../lib/rot/index.js';
 import Actor from './actor.js';
 import Snake from './snake.js';
+import Bat from './bat.js';
 import PreciseShadowcasting from '../lib/rot/fov/precise-shadowcasting.js';
 import AStar from '../lib/rot/path/astar.js';
 
@@ -47,10 +48,22 @@ export default class Hero extends Actor {
       if (!this.explored.has(position)) {
         this.explored.add(position);
         const char = this.world.map.get(position);
-        if (!RNG.getUniformInt(0, 50) && char === '‧') {
-          const foe = new Snake(this.world, position);
-          this.world.actors.push(foe);
-          this.target = null;
+        if (char === '‧') {
+          if (!RNG.getUniformInt(0, 50)) {
+            const foe = new Snake(this.world, position);
+            this.world.actors.push(foe);
+            this.target = null;
+          } else if (!RNG.getUniformInt(0, 50)) {
+            const foe = new Bat(this.world, position);
+            this.world.actors.push(foe);
+            this.target = null;
+          } else if (!RNG.getUniformInt(0, 250)) {
+            this.world.map.set(position, '+');
+          } else if (!RNG.getUniformInt(0, 1000)) {
+            this.world.map.set(position, '⌐');
+          } else if (!RNG.getUniformInt(0, 500)) {
+            this.world.map.set(position, '⊠');
+          }
         }
       }
     });
