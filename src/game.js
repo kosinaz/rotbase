@@ -17,9 +17,17 @@ export default class Game {
 Game.tiled = true;
 const tileset = document.createElement('img');
 tileset.src = './images/1bitpack_kenney/Tilesheet/colored.png';
-Game.display = new Display({
+Game.rectOptions = {
+  layout: 'rect',
   bg: '#472d3c',
-  layout: Game.tiled ? 'tile-gl' : 'rect',
+  width: 80,
+  height: 30,
+  fontSize: 16,
+  forceSquareRatio: true,
+}
+Game.tileOptions = {
+  bg: '#472d3c',
+  layout: 'tile-gl',
   tileWidth: 16,
   tileHeight: 16,
   tileSet: tileset,
@@ -36,10 +44,14 @@ Game.display = new Display({
     '˯': [119, 0],
     '‧': [68, 0],
     '+': [459, 391],
-    '¬': [85, 527],
+    '⌐': [85, 527],
     '⊠': [204, 527],
     '>': [51, 102],
     '<': [34, 102],
+    '♥': [391, 374],
+    '♡': [408, 374],
+    '🕨': [357, 476],
+    '🕪': [374, 476],
     '➧': [408, 357],
     ':': [493, 493],
     '.': [510, 493],
@@ -111,17 +123,15 @@ Game.display = new Display({
   tileColorize: true,
   width: 80,
   height: 30,
-  // forceSquareRatio: true,
-  // fontFamily: 'font',
-});
-if (Game.tiled) {
-  Game.display.drawText = function(x, y, text) {
-    for (let i = 0; i < text.length; i += 1) {
-      this.draw(x + i, y, text[i], 'transparent');
-    };
+};
+Game.display = new Display(Game.tileOptions);
+Game.display.drawText = function(x, y, text) {
+  for (let i = 0; i < text.length; i += 1) {
+    this.draw(x + i, y, text[i], Game.tiled ? 'transparent' : null);
   };
-}
-document.body.appendChild(Game.display.getContainer());
+};
+Game.canvas = Game.display.getContainer();
+document.body.appendChild(Game.canvas);
 Game.worldScene = new WorldScene(Game);
 Game.helpScene = new HelpScene(Game);
 Game.creditsScene = new CreditsScene(Game);

@@ -25,7 +25,7 @@ export default class Hero extends Actor {
     this.turns = 1;
     this.char = '@';
     this.name = 'you';
-    this.health = 10;
+    this.health = 5;
     this.damage = 1;
     this.speed = 3;
     this.explored = new Set();

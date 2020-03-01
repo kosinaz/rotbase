@@ -46,7 +46,7 @@ export default class MenuScene extends Scene {
         this.selected -= 1;
         this.game.display.draw(
             1, 4 + this.selected * 2, '➧', this.game.tiled ? 'transparent' : '',
-        )
+        );
       } else if (event.keyCode === 13) {
         if (this.selected === 0) {
           this.switchTo(this.game.worldScene);

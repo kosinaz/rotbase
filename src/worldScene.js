@@ -71,12 +71,36 @@ export default class WorldScene extends Scene {
         this.game.display.draw(+p[0], +p[1], char, color, bg);
       }
     });
+    let color = 'transparent';
+    let bg = null;
+    if (this.mouseX === 1 && this.mouseY === 26) {
+      if (this.game.tiled) {
+        color = 'rgba(255, 255, 255, 0.25)';
+      } else {
+        bg = '#aaa';
+      }
+    }
+    this.game.display.draw(1, 26, '@', this.game.tiled ? color : null, bg);
     this.game.display.drawText(
-        69, 26, `Music: ${this.music.muted ? 'off' : 'on'}`,
+        2, 26, '♥♥♥♥♥'.substr(0, this.world.hero.health) +
+        '♡♡♡♡♡'.substr(this.world.hero.health),
     );
-    this.game.display.drawText(1, 26, `Level: ${this.world.hero.z}`);
-    this.game.display.drawText(11, 26, `Health: ${this.world.hero.health}`);
-    this.game.display.drawText(1, 28, this.world.log[0].slice(-80));
+    color = 'transparent';
+    bg = null;
+    if (this.mouseX === 78 && this.mouseY === 26) {
+      if (this.game.tiled) {
+        color = 'rgba(255, 255, 255, 0.25)';
+      } else {
+        bg = '#aaa';
+      }
+    }
+    this.game.display.draw(
+        78,
+        26,
+        this.music.muted ? '🕨' : '🕪',
+        this.game.tiled ? color : null, bg,
+    );
+    this.game.display.drawText(0, 28, this.world.log[0].slice(-80));
   }
 
   /**
@@ -96,8 +120,19 @@ export default class WorldScene extends Scene {
       this.update();
       return;
     } else if (event.type === 'mousedown') {
-      if (this.eventX > 69 && this.eventY === 24) {
+      if (this.eventX === 78 && this.eventY === 26) {
         this.music.muted = !this.music.muted;
+        this.update();
+        return;
+      }
+      if (this.eventX === 1 && this.eventY === 26) {
+        this.game.tiled = !this.game.tiled;
+        this.game.display.setOptions(
+          this.game.tiled ? this.game.tileOptions : this.game.rectOptions,
+        );
+        document.body.removeChild(this.game.canvas);
+        this.game.canvas = this.game.display.getContainer();
+        document.body.appendChild(this.game.canvas);
         this.update();
         return;
       }
@@ -108,7 +143,8 @@ export default class WorldScene extends Scene {
           this.world.hero.y = this.world.downs[this.world.hero.z][1];
           this.world.engine.unlock();
           return;
-        } else if (char === '>') {
+        }
+        if (char === '>') {
           this.world.hero.z += 1;
           this.world.hero.x = this.world.ups[this.world.hero.z][0];
           this.world.hero.y = this.world.ups[this.world.hero.z][1];
@@ -125,11 +161,19 @@ export default class WorldScene extends Scene {
         this.music.muted = !this.music.muted;
         this.update();
         return;
-      } else if (event.keyCode === 84) {
+      }
+      if (event.keyCode === 84) {
         this.game.tiled = !this.game.tiled;
+        this.game.display.setOptions(
+          this.game.tiled ? this.game.tileOptions : this.game.rectOptions,
+        );
+        document.body.removeChild(this.game.canvas);
+        this.game.canvas = this.game.display.getContainer();
+        document.body.appendChild(this.game.canvas);
         this.update();
         return;
-      } else if (event.keyCode === 13) {
+      }
+      if (event.keyCode === 13) {
         if (char === '<') {
           this.world.hero.z -= 1;
           this.world.hero.x = this.world.downs[this.world.hero.z][0];
@@ -137,7 +181,8 @@ export default class WorldScene extends Scene {
           this.world.hero.target = null;
           this.world.engine.unlock();
           return;
-        } else if (char === '>') {
+        }
+        if (char === '>') {
           this.world.hero.z += 1;
           this.world.hero.x = this.world.ups[this.world.hero.z][0];
           this.world.hero.y = this.world.ups[this.world.hero.z][1];
