@@ -19,12 +19,6 @@ export default class Actor {
   constructor(world, position) {
     this.world = world;
     this.pos = position.split(',');
-    this.char = '§';
-    this.name = 'snake';
-    this.health = 3;
-    this.damage = 1;
-    this.speed = 1;
-    this.world.scheduler.add(this, true);
   }
 
   /**
@@ -37,7 +31,17 @@ export default class Actor {
   }
 
   /**
-   * The x coordinate of the actor;
+   * The speed of the actor.
+   *
+   * @return {number}
+   * @memberof Actor
+   */
+  getSpeed() {
+    return this.speed;
+  }
+
+  /**
+   * The x coordinate of the actor.
    *
    * @readonly
    * @memberof Actor
@@ -47,7 +51,7 @@ export default class Actor {
   }
 
   /**
-   * The y coordinate of the actor;
+   * The y coordinate of the actor.
    *
    * @readonly
    * @memberof Actor

@@ -1,4 +1,4 @@
-import Simple from '../lib/rot/scheduler/simple.js';
+import Speed from '../lib/rot/scheduler/speed.js';
 import {Engine, RNG} from '../lib/rot/index.js';
 import Hero from './hero.js';
 import Arena from '../lib/rot/map/arena.js';
@@ -27,7 +27,7 @@ export default class World {
    * @memberof World
    */
   create() {
-    this.scheduler = new Simple();
+    this.scheduler = new Speed();
     this.engine = new Engine(this.scheduler);
     this.log = [''];
     this.map = new Map();

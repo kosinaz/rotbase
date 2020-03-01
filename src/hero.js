@@ -1,5 +1,6 @@
 import {RNG} from '../lib/rot/index.js';
 import Actor from './actor.js';
+import Snake from './snake.js';
 import PreciseShadowcasting from '../lib/rot/fov/precise-shadowcasting.js';
 import AStar from '../lib/rot/path/astar.js';
 
@@ -24,9 +25,12 @@ export default class Hero extends Actor {
     this.char = '@';
     this.name = 'you';
     this.health = 10;
+    this.damage = 1;
+    this.speed = 3;
     this.explored = new Set();
     this.fov = new Set();
     this.ps = new PreciseShadowcasting(this.isPassable.bind(this));
+    this.world.scheduler.add(this, true);
   }
 
   /**
@@ -43,8 +47,8 @@ export default class Hero extends Actor {
       if (!this.explored.has(position)) {
         this.explored.add(position);
         const char = this.world.map.get(position);
-        if (!RNG.getUniformInt(0, 250) && char === '‧') {
-          const foe = new Actor(this.world, position);
+        if (!RNG.getUniformInt(0, 50) && char === '‧') {
+          const foe = new Snake(this.world, position);
           this.world.actors.push(foe);
           this.target = null;
         }
