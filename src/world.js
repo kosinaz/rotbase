@@ -62,7 +62,7 @@ export default class World {
       const rooms = digger.getRooms();
       for (let i = 1; i < rooms.length - 2; i += 1) {
         const roomType = RNG.getItem(['snake', 'bat']);
-        for (let j = 0; j < RNG.getUniformInt(1, 5); j += 1) {
+        for (let j = 0; j < RNG.getUniformInt(1, z); j += 1) {
           const x = RNG.getUniformInt(rooms[i].getLeft(), rooms[i].getRight());
           const y = RNG.getUniformInt(rooms[i].getTop(), rooms[i].getBottom());
           const actor = this.actors.find(
@@ -83,11 +83,11 @@ export default class World {
         for (let j = 0; j < RNG.getUniformInt(1, 5); j += 1) {
           const x = RNG.getUniformInt(rooms[i].getLeft(), rooms[i].getRight());
           const y = RNG.getUniformInt(rooms[i].getTop(), rooms[i].getBottom());
-          if (!RNG.getUniformInt(0, 5)) {
+          if (!RNG.getUniformInt(0, 10)) {
             this.map.set(`${x},${y},${z}`, '+');
-          } else if (!RNG.getUniformInt(0, 5)) {
+          } else if (!RNG.getUniformInt(0, 10)) {
             this.map.set(`${x},${y},${z}`, '⊠');
-          } else if (!RNG.getUniformInt(0, 5)) {
+          } else if (!RNG.getUniformInt(0, 10)) {
             this.map.set(`${x},${y},${z}`, '⌐');
           }
         }
@@ -101,6 +101,17 @@ export default class World {
     this.map.set(`20,12,0`, '˯');
     this.map.set(`${this.downs[0][0]},${this.downs[0][1]},0`, '>');
     this.engine.start();
+  }
+
+  /**
+   * Get the actor at the given position.
+   *
+   * @param {string} position
+   * @return {Actor}
+   * @memberof World
+   */
+  getActorAt(position) {
+    return this.actors.find((actor) => actor.isAt(position));
   }
 
   /**

@@ -86,17 +86,20 @@ export default class Hero extends Actor {
       this.y = this.path[1][1];
       const char = this.world.map.get(this.position);
       if (['+', '⊠', '⌐'].includes(char)) {
-        this.world.map.set(this.position, '‧');
-        if (char === '+') {
-          this.health = Math.min(5, this.health + 1);
+        if (char === '+' && this.health < 5) {
+          this.world.map.set(this.position, '‧');
+          this.health += 1;
           this.world.log.unshift(` you used a medkit `);
-        } else if (char === '⊠') {
+        } else if (char === '⊠' && this.bullets < 12) {
+          this.world.map.set(this.position, '‧');
           const bullets = RNG.getUniformInt(2, 6);
           this.bullets = Math.min(12, this.bullets + bullets);
           this.world.log.unshift(` you picked up ${bullets} bullets `);
-        } else if (char === '⌐') {
+        } else if (char === '⌐' && (!this.hasPistol || this.bullets < 12)) {
+          this.world.map.set(this.position, '‧');
           const bullets = RNG.getUniformInt(2, 6);
           this.hasPistol = true;
+          this.damage = 3;
           this.bullets = Math.min(12, this.bullets + bullets);
           this.world.log.unshift(
               ` you picked up a pistol with ${bullets} bullets `,
@@ -104,6 +107,27 @@ export default class Hero extends Actor {
         }
       }
     }
+    this.ps.compute(this.x, this.y, 11, (x, y) => {
+      const actor = this.world.actors.find((actor) =>
+        actor.isAt(this.getPosition(x, y)));
+      if (actor) {
+        actor.target = [this.world.hero.x, this.world.hero.y];
+      }
+    });
+    this.world.engine.unlock();
+  }
+
+  /**
+   * Attack the target actor from afar.
+   *
+   * @param {Actor} actor
+   * @memberof Hero
+   */
+  fireAndUnlock(actor) {
+    this.world.log.unshift(' you fired your pistol ');
+    actor.weaken(this.damage + RNG.getUniformInt(0, 3));
+    this.bullets -= 1;
+    this.target = null;
     this.ps.compute(this.x, this.y, 11, (x, y) => {
       const actor = this.world.actors.find((actor) =>
         actor.isAt(this.getPosition(x, y)));

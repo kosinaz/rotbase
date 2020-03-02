@@ -158,8 +158,20 @@ export default class WorldScene extends Scene {
           return;
         }
       }
-      this.world.hero.target = [this.eventX, this.eventY];
-      this.world.hero.moveToTargetAndUnlock();
+      const actor = this.world.getActorAt(
+          `${this.eventX},${this.eventY},${this.world.hero.z}`,
+      );
+      if (actor &&
+          this.world.hero.hasPistol &&
+          this.world.hero.bullets > 0 &&
+          (Math.abs(this.world.hero.x - this.eventX) > 1 ||
+          Math.abs(this.world.hero.y - this.eventY) > 1)
+      ) {
+        this.world.hero.fireAndUnlock(actor);
+      } else {
+        this.world.hero.target = [this.eventX, this.eventY];
+        this.world.hero.moveToTargetAndUnlock();
+      }
     } else if (event.type === 'keydown') {
       let x = this.world.hero.x;
       let y = this.world.hero.y;
